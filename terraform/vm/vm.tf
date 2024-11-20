@@ -1,5 +1,7 @@
 resource "google_compute_instance" "default" {
-  name         = "test"
+  for_each = toset([ for num in range(16) : "alunno-${num}" ])
+
+  name         = "${each.value}"
   machine_type = "e2-micro"
   zone         = "europe-west3-a"
 
