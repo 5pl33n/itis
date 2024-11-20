@@ -1,0 +1,37 @@
+name: Deploy a container on a vm
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      sa_mail:
+        description: SA mail
+        required: true
+
+jobs:
+  build-ci:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_ID: itis-441214
+      VM_NAME: test
+      ZONE: europe-west3-a
+      SA_EMAIL: ${{ github.event.inputs.sa_mail }}
+
+    steps:
+      - name: Checkout tasks
+        uses: actions/checkout@v3
+        
+      - name: gcloud authentication
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+          project_id: ${{ env.PROJECT_ID }}          
+
+      - name: Docker run
+        run: |
+          gcloud compute ssh ${{ env.VM_NAME }} --zone ${{ env.ZONE }} --impersonate-service-account=${{ env.SA_EMAIL }} -- '
+          docker run -p 80:80 -d nginx
