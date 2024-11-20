@@ -29,7 +29,7 @@ def transfer_files_to_hosts(ip_file, files_dir, destination_path, username, pass
             ssh.close()
 
 ip_file = 'ip_list.txt'
-files_dir = '/home/spleen/5pl33n/itis/terraform/keys/'
+files_dir = '/home/spleen/5pl33n/itis/terraform/gke/keys/'
 destination_path = '/home/alunno'
 username = 'alunno'
 password = 'password'
